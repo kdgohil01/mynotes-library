@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,60 +8,81 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📘</text></svg>">
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+    .animated-bg {
+      background: linear-gradient(-45deg, #e0f7fa, #c3dafe, #e0f2f1, #fce4ec);
+      background-size: 400% 400%;
+      animation: gradientMove 10s ease infinite;
+    }
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .dark body {
+      background: #0f172a;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 text-gray-900 min-h-screen font-sans">
-  <div class="container mx-auto px-4 py-6">
-    <!-- Auth Section -->
-    <div id="authSection" class="flex justify-between items-center mb-4">
+<body class="text-gray-900 min-h-screen transition-colors duration-500 bg-white dark:bg-gray-900" id="appBody">
+
+  <!-- 🔝 Floating Header with Dark Mode Toggle beside Auth buttons -->
+  <header class="sticky top-0 bg-white dark:bg-gray-800 shadow z-10 py-3 px-6 flex justify-between items-center flex-wrap gap-4">
+    <h1 class="text-2xl font-bold text-blue-600 dark:text-blue-300">📘 MyNotes</h1>
+    <div class="flex gap-4 items-center">
+      <button id="darkToggle" class="bg-gray-800 text-white dark:bg-white dark:text-black px-4 py-2 rounded shadow hover:scale-105 transition">
+        🌓 Toggle Mode
+      </button>
+      <div id="userInfo" class="hidden flex items-center gap-4">
+        <span id="userEmail" class="text-sm font-medium text-gray-700 dark:text-gray-200"></span>
+        <button id="logoutBtn" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Logout</button>
+      </div>
       <button id="signInBtn" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
         🔐 Sign in with Google
       </button>
-      <div id="userInfo" class="hidden text-sm">
-        <span id="userEmail" class="mr-3 font-medium"></span>
-        <button id="logoutBtn" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Logout</button>
-      </div>
     </div>
+  </header>
 
-    <h1 class="text-3xl font-bold text-center mb-6">📚 MyNotes Library</h1>
-
-    <!-- Note Form -->
-    <div class="bg-white rounded-xl shadow-md p-4 mb-6">
-      <h2 class="text-xl font-semibold mb-3">Add a New Note</h2>
-      <form id="noteForm" class="space-y-3">
-        <input type="text" id="title" placeholder="Note Title" required class="w-full p-2 border rounded" />
-        <textarea id="description" placeholder="Description" required class="w-full p-2 border rounded"></textarea>
-        <input type="url" id="link" placeholder="Paste File Link (Google Drive, Dropbox, etc)" required class="w-full p-2 border rounded" />
-        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-          Save Note
-        </button>
+  <main class="container mx-auto px-4 py-6" id="mainApp">
+    <!-- 📝 Note Adding Form -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 mb-8">
+      <h2 class="text-2xl font-semibold mb-4 text-blue-700 dark:text-blue-300">➕ Add a New Note</h2>
+      <form id="noteForm" class="space-y-4">
+        <input type="text" id="title" placeholder="Note Title" required class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+        <textarea id="description" placeholder="Description" required class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white"></textarea>
+        <input type="url" id="link" placeholder="Paste File Link (Google Drive, Dropbox, etc)" required class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+        <button type="submit" class="bg-blue-600 text-white px-5 py-2 rounded-xl hover:bg-blue-700 transition">💾 Save Note</button>
         <div id="progressBar" class="w-full bg-gray-300 h-3 rounded overflow-hidden mt-3 hidden">
           <div id="progressFill" class="bg-blue-500 h-full w-0 transition-all duration-300 ease-linear"></div>
         </div>
       </form>
     </div>
 
-    <!-- Search + Notes -->
-    <div class="mb-6">
-      <input type="text" id="searchInput" placeholder="Search notes..." class="w-full p-2 border rounded" />
+    <!-- 🔎 Search bar -->
+    <div class="mb-8">
+      <input type="text" id="searchInput" placeholder="🔍 Search notes..." class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
     </div>
 
-    <div>
-      <h2 class="text-xl font-semibold mb-3">📄 Your Notes</h2>
-      <div id="notesContainer" class="space-y-4"></div>
-    </div>
-  </div>
+    <!-- 📄 Notes List -->
+    <section>
+      <h2 class="text-2xl font-semibold mb-4 text-blue-700 dark:text-blue-300">📄 Your Notes</h2>
+      <div id="notesContainer" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    </section>
+  </main>
 
-  <!-- Firebase Setup -->
+  <!-- 🔥 Firebase Setup -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-analytics.js";
     import {
-      getFirestore, collection, addDoc, getDocs,
-      query, orderBy, doc, deleteDoc, where
+      getFirestore, collection, addDoc, getDocs, query, orderBy, doc, deleteDoc, where
     } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
     import {
-      getAuth, signInWithPopup, GoogleAuthProvider,
-      onAuthStateChanged, signOut
+      getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut
     } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
 
     const firebaseConfig = {
@@ -75,18 +96,12 @@
     };
 
     const app = initializeApp(firebaseConfig);
-    getAnalytics(app);
+    const analytics = getAnalytics(app);
     const db = getFirestore(app);
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
 
-    // Assign to window so script.js can access
     window.db = db;
-    window.auth = auth;
-    window.provider = provider;
-    window.signInWithPopup = signInWithPopup;
-    window.signOut = signOut;
-    window.onAuthStateChanged = onAuthStateChanged;
     window.firestoreCollection = collection;
     window.firestoreAddDoc = addDoc;
     window.firestoreGetDocs = getDocs;
@@ -95,9 +110,34 @@
     window.firestoreWhere = where;
     window.firestoreDoc = doc;
     window.firestoreDeleteDoc = deleteDoc;
+    window.auth = auth;
+    window.provider = provider;
+    window.signInWithPopup = signInWithPopup;
+    window.onAuthStateChanged = onAuthStateChanged;
+    window.signOut = signOut;
   </script>
 
-  <!-- Load app AFTER Firebase setup -->
-  <script type="module" src="script.js"></script>
+  <script>
+    // Toggle dark mode
+    const toggleBtn = document.getElementById("darkToggle");
+    const body = document.getElementById("appBody");
+    const htmlEl = document.documentElement;
+
+    toggleBtn.addEventListener("click", () => {
+      htmlEl.classList.toggle("dark");
+      if (!htmlEl.classList.contains("dark")) {
+        body.classList.add("animated-bg");
+      } else {
+        body.classList.remove("animated-bg");
+      }
+    });
+
+    if (!htmlEl.classList.contains("dark")) {
+      body.classList.add("animated-bg");
+    }
+  </script>
+
+  <!-- 🚀 App Logic -->
+  <script src="script.js"></script>
 </body>
 </html>
