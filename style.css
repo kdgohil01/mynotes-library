@@ -1,0 +1,110 @@
+/* ====== GLOBAL FONT + BACKGROUND ====== */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(to bottom right, #f3f4f6, #e5e7eb);
+}
+
+/* ====== HEADER ====== */
+h1 {
+  background: linear-gradient(to right, #2563eb, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+/* ====== NOTE FORM ====== */
+form input,
+form textarea {
+  transition: 0.3s ease all;
+}
+form input:focus,
+form textarea:focus {
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+  outline: none;
+  border-color: #2563eb;
+}
+form button {
+  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+  transition: 0.3s ease;
+}
+form button:hover {
+  transform: translateY(-1px);
+}
+
+/* ====== PROGRESS BAR ====== */
+#progressBar {
+  animation: fadeIn 0.3s ease;
+}
+#progressFill {
+  transition: width 0.3s ease;
+}
+
+/* ====== CARD ANIMATION (NOTE) ====== */
+.note-card {
+  animation: fadeInUp 0.4s ease both;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.note-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* ====== DELETE BUTTON ====== */
+.delete-btn {
+  transition: 0.2s ease;
+}
+.delete-btn:hover {
+  transform: scale(1.1);
+}
+
+/* ====== SEARCH INPUT ====== */
+#searchInput {
+  transition: 0.3s ease all;
+}
+#searchInput:focus {
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+  border-color: #22c55e;
+}
+
+/* ====== ANIMATIONS ====== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+.fade-out {
+  animation: fadeOut 1s forwards;
+}
+
+/* ====== SUCCESS MESSAGE ====== */
+.saved-msg {
+  animation: fadeIn 0.3s ease-in-out;
+  color: #10b981;
+  text-align: center;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}

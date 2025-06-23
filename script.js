@@ -81,7 +81,9 @@ noteForm.addEventListener("submit", async function (e) {
     progressFill.style.width = percent + "%";
   }, 200);
 
-  const docRef = await window.firestoreAddDoc(
+let docRef;
+try {
+  docRef = await window.firestoreAddDoc(
     window.firestoreCollection(window.db, "notes"),
     {
       title,
@@ -91,13 +93,21 @@ noteForm.addEventListener("submit", async function (e) {
       userEmail: currentUser.email
     }
   );
+} catch (error) {
+  console.error("❌ Firestore Add Error:", error);
+  alert("Failed to save note: " + error.message);
+  saveBtn.innerText = "Save Note";
+  saveBtn.disabled = false;
+  return;
+}
+
 
   clearInterval(fakeProgress);
   progressFill.style.width = "100%";
 
   const savedMsg = document.createElement("p");
   savedMsg.innerText = "✅ Note saved successfully!";
-  savedMsg.className = "text-green-600 text-sm mt-2 text-center";
+  savedMsg.className = "saved-msg fade-in text-green-600 text-sm mt-2 text-center";
   noteForm.appendChild(savedMsg);
 
   const newNote = {
@@ -115,7 +125,8 @@ noteForm.addEventListener("submit", async function (e) {
   setTimeout(() => {
     progressBar.classList.add("hidden");
     progressFill.style.width = "0%";
-    savedMsg.remove();
+    savedMsg.classList.add("fade-out");
+    setTimeout(() => savedMsg.remove(), 1000);
   }, 2000);
 
   noteForm.reset();
@@ -123,7 +134,7 @@ noteForm.addEventListener("submit", async function (e) {
   saveBtn.disabled = false;
 });
 
-// 📥 Load notes from Firestore (user-specific)
+// 📥 Load notes from Firestore
 async function loadNotes() {
   const q = window.firestoreQuery(
     window.firestoreCollection(window.db, "notes"),
@@ -153,14 +164,16 @@ function displayNotes(notes) {
     )
     .forEach(note => {
       const div = document.createElement("div");
-      div.className = "bg-white p-4 rounded shadow flex justify-between items-start";
+      div.className = "note-card bg-white p-4 rounded-xl shadow transition hover:scale-[1.01] duration-200";
       div.innerHTML = `
-        <div>
-          <h3 class="text-lg font-semibold">${note.title}</h3>
-          <p class="text-gray-700 mb-2">${note.description}</p>
-          <a href="${note.link}" target="_blank" class="text-blue-500 underline">📥 Download File</a>
+        <div class="flex justify-between items-start">
+          <div>
+            <h3 class="text-lg font-semibold mb-1">${note.title}</h3>
+            <p class="text-gray-700 mb-2">${note.description}</p>
+            <a href="${note.link}" target="_blank" class="text-blue-500 underline hover:text-blue-700 transition">📥 Download File</a>
+          </div>
+          <button data-id="${note.id}" class="delete-btn text-red-500 hover:text-red-700 font-bold text-lg">🗑️</button>
         </div>
-        <button data-id="${note.id}" class="delete-btn text-red-500 hover:text-red-700 font-bold">🗑️</button>
       `;
       notesContainer.appendChild(div);
     });
@@ -181,5 +194,5 @@ async function deleteNote(id) {
   displayNotes(allNotes);
 }
 
-// 🔍 Search listener
+// 🔍 Search
 searchInput.addEventListener("input", () => displayNotes(allNotes));

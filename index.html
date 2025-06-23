@@ -6,12 +6,12 @@
   <title>MyNotes Library</title>
   <meta name="theme-color" content="#3B82F6" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📘</text></svg>">
+  <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 text-gray-900 min-h-screen font-sans">
   <div class="container mx-auto px-4 py-6">
-
-    <!-- 🔐 Google Auth Section -->
+    <!-- Auth Section -->
     <div id="authSection" class="flex justify-between items-center mb-4">
       <button id="signInBtn" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
         🔐 Sign in with Google
@@ -24,58 +24,44 @@
 
     <h1 class="text-3xl font-bold text-center mb-6">📚 MyNotes Library</h1>
 
-    <!-- 📝 Note Adding Form -->
+    <!-- Note Form -->
     <div class="bg-white rounded-xl shadow-md p-4 mb-6">
       <h2 class="text-xl font-semibold mb-3">Add a New Note</h2>
       <form id="noteForm" class="space-y-3">
         <input type="text" id="title" placeholder="Note Title" required class="w-full p-2 border rounded" />
         <textarea id="description" placeholder="Description" required class="w-full p-2 border rounded"></textarea>
         <input type="url" id="link" placeholder="Paste File Link (Google Drive, Dropbox, etc)" required class="w-full p-2 border rounded" />
-
         <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
           Save Note
         </button>
-
-        <!-- 📊 Progress Bar -->
         <div id="progressBar" class="w-full bg-gray-300 h-3 rounded overflow-hidden mt-3 hidden">
           <div id="progressFill" class="bg-blue-500 h-full w-0 transition-all duration-300 ease-linear"></div>
         </div>
       </form>
     </div>
 
-    <!-- 🔎 Search bar -->
+    <!-- Search + Notes -->
     <div class="mb-6">
       <input type="text" id="searchInput" placeholder="Search notes..." class="w-full p-2 border rounded" />
     </div>
 
-    <!-- 📄 Notes List -->
     <div>
       <h2 class="text-xl font-semibold mb-3">📄 Your Notes</h2>
       <div id="notesContainer" class="space-y-4"></div>
     </div>
   </div>
 
-  <!-- 🔥 Firebase Setup -->
+  <!-- Firebase Setup -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-analytics.js";
     import {
-      getFirestore,
-      collection,
-      addDoc,
-      getDocs,
-      query,
-      orderBy,
-      doc,
-      deleteDoc,
-      where
+      getFirestore, collection, addDoc, getDocs,
+      query, orderBy, doc, deleteDoc, where
     } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
     import {
-      getAuth,
-      signInWithPopup,
-      GoogleAuthProvider,
-      onAuthStateChanged,
-      signOut
+      getAuth, signInWithPopup, GoogleAuthProvider,
+      onAuthStateChanged, signOut
     } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
 
     const firebaseConfig = {
@@ -89,13 +75,18 @@
     };
 
     const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
+    getAnalytics(app);
     const db = getFirestore(app);
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
 
-    // 🔄 Make Firebase services available in script.js
+    // Assign to window so script.js can access
     window.db = db;
+    window.auth = auth;
+    window.provider = provider;
+    window.signInWithPopup = signInWithPopup;
+    window.signOut = signOut;
+    window.onAuthStateChanged = onAuthStateChanged;
     window.firestoreCollection = collection;
     window.firestoreAddDoc = addDoc;
     window.firestoreGetDocs = getDocs;
@@ -104,14 +95,9 @@
     window.firestoreWhere = where;
     window.firestoreDoc = doc;
     window.firestoreDeleteDoc = deleteDoc;
-    window.auth = auth;
-    window.provider = provider;
-    window.signInWithPopup = signInWithPopup;
-    window.onAuthStateChanged = onAuthStateChanged;
-    window.signOut = signOut;
   </script>
 
-  <!-- 🚀 App Logic -->
-  <script src="script.js"></script>
+  <!-- Load app AFTER Firebase setup -->
+  <script type="module" src="script.js"></script>
 </body>
 </html>
