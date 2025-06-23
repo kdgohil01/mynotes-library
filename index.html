@@ -3,50 +3,54 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MyNotes Library</title>
+  <title>📘 MyNotes Library</title>
   <meta name="theme-color" content="#3B82F6" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📘</text></svg>">
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 text-gray-900 min-h-screen font-sans">
-  <div class="container mx-auto px-4 py-6">
+<body class="bg-gradient-to-br from-gray-100 to-gray-200 text-gray-900 min-h-screen font-sans">
+  <div class="container mx-auto px-4 py-8">
     <!-- Auth Section -->
-    <div id="authSection" class="flex justify-between items-center mb-4">
-      <button id="signInBtn" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+    <div id="authSection" class="flex justify-between items-center mb-6">
+      <button id="signInBtn" class="bg-green-500 text-white px-4 py-2 rounded-lg shadow hover:bg-green-600 transition">
         🔐 Sign in with Google
       </button>
-      <div id="userInfo" class="hidden text-sm">
-        <span id="userEmail" class="mr-3 font-medium"></span>
-        <button id="logoutBtn" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Logout</button>
+      <div id="userInfo" class="hidden text-sm flex items-center gap-4">
+        <span id="userEmail" class="font-medium"></span>
+        <button id="logoutBtn" class="bg-red-500 text-white px-3 py-1 rounded-lg shadow hover:bg-red-600 transition">Logout</button>
       </div>
     </div>
 
-    <h1 class="text-3xl font-bold text-center mb-6">📚 MyNotes Library</h1>
+    <h1 class="text-4xl font-extrabold text-center mb-8 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-400">
+      📚 MyNotes Library
+    </h1>
 
     <!-- Note Form -->
-    <div class="bg-white rounded-xl shadow-md p-4 mb-6">
-      <h2 class="text-xl font-semibold mb-3">Add a New Note</h2>
-      <form id="noteForm" class="space-y-3">
-        <input type="text" id="title" placeholder="Note Title" required class="w-full p-2 border rounded" />
-        <textarea id="description" placeholder="Description" required class="w-full p-2 border rounded"></textarea>
-        <input type="url" id="link" placeholder="Paste File Link (Google Drive, Dropbox, etc)" required class="w-full p-2 border rounded" />
-        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-          Save Note
+    <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+      <h2 class="text-2xl font-semibold mb-4">Add a New Note</h2>
+      <form id="noteForm" class="space-y-4">
+        <input type="text" id="title" placeholder="Note Title" required class="w-full p-3 border rounded-lg" />
+        <textarea id="description" placeholder="Description" required class="w-full p-3 border rounded-lg"></textarea>
+        <input type="url" id="link" placeholder="Paste File Link (Google Drive, Dropbox, etc)" required class="w-full p-3 border rounded-lg" />
+        <input type="text" id="tags" placeholder="Tags (comma separated)" class="w-full p-3 border rounded-lg" />
+        <button type="submit" class="bg-blue-500 text-white px-5 py-2 rounded-lg hover:bg-blue-600 transition">
+          💾 Save Note
         </button>
-        <div id="progressBar" class="w-full bg-gray-300 h-3 rounded overflow-hidden mt-3 hidden">
+        <div id="progressBar" class="w-full bg-gray-300 h-3 rounded overflow-hidden mt-4 hidden">
           <div id="progressFill" class="bg-blue-500 h-full w-0 transition-all duration-300 ease-linear"></div>
         </div>
       </form>
     </div>
 
-    <!-- Search + Notes -->
+    <!-- Search -->
     <div class="mb-6">
-      <input type="text" id="searchInput" placeholder="Search notes..." class="w-full p-2 border rounded" />
+      <input type="text" id="searchInput" placeholder="🔍 Search notes..." class="w-full p-3 border rounded-lg" />
     </div>
 
+    <!-- Notes -->
     <div>
-      <h2 class="text-xl font-semibold mb-3">📄 Your Notes</h2>
+      <h2 class="text-2xl font-semibold mb-4">📄 Your Notes</h2>
       <div id="notesContainer" class="space-y-4"></div>
     </div>
   </div>
@@ -56,8 +60,8 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-analytics.js";
     import {
-      getFirestore, collection, addDoc, getDocs,
-      query, orderBy, doc, deleteDoc, where
+      getFirestore, collection, addDoc, getDocs, setDoc,
+      query, orderBy, doc, deleteDoc, where, updateDoc
     } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
     import {
       getAuth, signInWithPopup, GoogleAuthProvider,
@@ -80,7 +84,6 @@
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
 
-    // Assign to window so script.js can access
     window.db = db;
     window.auth = auth;
     window.provider = provider;
@@ -89,6 +92,8 @@
     window.onAuthStateChanged = onAuthStateChanged;
     window.firestoreCollection = collection;
     window.firestoreAddDoc = addDoc;
+    window.firestoreSetDoc = setDoc;
+    window.firestoreUpdateDoc = updateDoc;
     window.firestoreGetDocs = getDocs;
     window.firestoreQuery = query;
     window.firestoreOrderBy = orderBy;
@@ -97,7 +102,6 @@
     window.firestoreDeleteDoc = deleteDoc;
   </script>
 
-  <!-- Load app AFTER Firebase setup -->
   <script type="module" src="script.js"></script>
 </body>
 </html>
