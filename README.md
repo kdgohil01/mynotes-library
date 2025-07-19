@@ -1,8 +1,11 @@
+[![GitHub stars](https://img.shields.io/github/stars/hemathens/mynotes-library?style=social)](https://github.com/hemathens/mynotes-library/stargazers)
+[![Kaggle Profile](https://img.shields.io/badge/Kaggle-hem%20ajit%20patel-20BEFF?logo=kaggle)](https://www.kaggle.com/hemajitpatel)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Hem%20Ajit%20Patel-0A66C2?logo=linkedin)](https://www.linkedin.com/in/hem-patel19)
+[![GitHub](https://img.shields.io/badge/GitHub-hemathens-181717?logo=github)](https://github.com/hemathens)
+
 # 📚 MyNotes Library
 
 A minimalist and powerful web-based note-taking app with **Google Sign-In**, **real-time Firestore sync**, and **tag-based filtering** – all beautifully wrapped in a modern Tailwind UI.
-
-![MyNotes Screenshot](https://github.com/hemathens/mynotes-library/assets/banner.jpg) <!-- Replace with real screenshot if available -->
 
 ---
 
