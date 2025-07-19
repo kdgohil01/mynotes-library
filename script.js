@@ -1,15 +1,3 @@
-<<<<<<< HEAD
-// This file will handle advanced logic for:
-// - Save, edit, delete notes
-// - LocalStorage sync
-// - Tag filtering
-// - Google Drive image preview (if link is image)
-
-// Code will match the new index.html structure
-// Ready for enhanced full JS logic to be written on demand
-
-console.log("Script loaded");
-=======
 window.addEventListener("DOMContentLoaded", () => {
   const noteForm = document.getElementById("noteForm");
   const notesContainer = document.getElementById("notesContainer");
@@ -63,13 +51,14 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // 📤 Submit Note Form
+  // 💾 Submit Note
   noteForm.addEventListener("submit", async function (e) {
     e.preventDefault();
 
     const title = document.getElementById("title").value.trim();
     const description = document.getElementById("description").value.trim();
     const link = document.getElementById("link").value.trim();
+    const tags = document.getElementById("tags").value.trim();
     const progressBar = document.getElementById("progressBar");
     const progressFill = document.getElementById("progressFill");
 
@@ -78,7 +67,7 @@ window.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const saveBtn = noteForm.querySelector("button");
+    const saveBtn = noteForm.querySelector("button[type='submit']");
     saveBtn.innerText = "Saving...";
     saveBtn.disabled = true;
     progressBar.classList.remove("hidden");
@@ -102,6 +91,7 @@ window.addEventListener("DOMContentLoaded", () => {
           title,
           description,
           link,
+          tags,
           timestamp: Date.now(),
           userEmail: currentUser.email
         }
@@ -127,6 +117,7 @@ window.addEventListener("DOMContentLoaded", () => {
       title,
       description,
       link,
+      tags,
       timestamp: Date.now(),
       userEmail: currentUser.email
     };
@@ -142,11 +133,11 @@ window.addEventListener("DOMContentLoaded", () => {
     }, 2000);
 
     noteForm.reset();
-    saveBtn.innerText = "Save Note";
+    saveBtn.innerText = "💾 Save Note";
     saveBtn.disabled = false;
   });
 
-  // 📥 Load notes from Firestore
+  // 📥 Load Notes
   async function loadNotes() {
     const q = window.firestoreQuery(
       window.firestoreCollection(window.db, "notes"),
@@ -164,7 +155,7 @@ window.addEventListener("DOMContentLoaded", () => {
     displayNotes(allNotes);
   }
 
-  // 🖼️ Display notes
+  // 🧾 Display Notes
   function displayNotes(notes) {
     const query = searchInput.value.toLowerCase();
     notesContainer.innerHTML = "";
@@ -172,17 +163,19 @@ window.addEventListener("DOMContentLoaded", () => {
     notes
       .filter(note =>
         note.title.toLowerCase().includes(query) ||
-        note.description.toLowerCase().includes(query)
+        note.description.toLowerCase().includes(query) ||
+        (note.tags && note.tags.toLowerCase().includes(query))
       )
       .forEach(note => {
         const div = document.createElement("div");
-        div.className = "note-card bg-white p-4 rounded-xl shadow transition hover:scale-[1.01] duration-200";
+        div.className = "note-card bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-4 rounded-xl shadow fade-in";
         div.innerHTML = `
           <div class="flex justify-between items-start">
             <div>
               <h3 class="text-lg font-semibold mb-1">${note.title}</h3>
-              <p class="text-gray-700 mb-2">${note.description}</p>
+              <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">${note.description}</p>
               <a href="${note.link}" target="_blank" class="text-blue-500 underline hover:text-blue-700 transition">📥 Download File</a>
+              ${note.tags ? `<p class="mt-2 text-xs italic text-gray-500">Tags: ${note.tags}</p>` : ''}
             </div>
             <button data-id="${note.id}" class="delete-btn text-red-500 hover:text-red-700 font-bold text-lg">🗑️</button>
           </div>
@@ -198,7 +191,7 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // ❌ Delete note
+  // ❌ Delete Note
   async function deleteNote(id) {
     const docRef = window.firestoreDoc(window.db, "notes", id);
     await window.firestoreDeleteDoc(docRef);
@@ -206,7 +199,6 @@ window.addEventListener("DOMContentLoaded", () => {
     displayNotes(allNotes);
   }
 
-  // 🔍 Search
+  // 🔍 Real-time Search
   searchInput.addEventListener("input", () => displayNotes(allNotes));
 });
->>>>>>> upstream/main

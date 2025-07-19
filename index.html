@@ -10,9 +10,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-    }
+    body { font-family: 'Poppins', sans-serif; }
     .animated-bg {
       background: linear-gradient(-45deg, #e0f7fa, #c3dafe, #e0f2f1, #fce4ec);
       background-size: 400% 400%;
@@ -28,23 +26,11 @@
     }
   </style>
 </head>
-HEAD
-<body class="bg-gradient-to-br from-gray-100 to-gray-200 text-gray-900 min-h-screen font-sans">
-  <div class="container mx-auto px-4 py-8">
-    <!-- Auth Section -->
-    <div id="authSection" class="flex justify-between items-center mb-6">
-      <button id="signInBtn" class="bg-green-500 text-white px-4 py-2 rounded-lg shadow hover:bg-green-600 transition">
-        🔐 Sign in with Google
-      </button>
-      <div id="userInfo" class="hidden text-sm flex items-center gap-4">
-        <span id="userEmail" class="font-medium"></span>
-        <button id="logoutBtn" class="bg-red-500 text-white px-3 py-1 rounded-lg shadow hover:bg-red-600 transition">Logout</button>
-      </div>
 
-<body class="text-gray-900 min-h-screen transition-colors duration-500 bg-white dark:bg-gray-900" id="appBody">
+<body id="appBody" class="text-gray-900 bg-white dark:bg-gray-900 min-h-screen transition-colors duration-500">
 
-  <!-- 🔝 Floating Header with Dark Mode Toggle beside Auth buttons -->
-  <header class="sticky top-0 bg-white dark:bg-gray-800 shadow z-10 py-3 px-6 flex justify-between items-center flex-wrap gap-4">
+  <!-- 🔝 Header -->
+  <header class="sticky top-0 bg-white dark:bg-gray-800 shadow z-10 py-4 px-6 flex justify-between items-center flex-wrap gap-4">
     <h1 class="text-2xl font-bold text-blue-600 dark:text-blue-300">📘 MyNotes</h1>
     <div class="flex gap-4 items-center">
       <button id="darkToggle" class="bg-gray-800 text-white dark:bg-white dark:text-black px-4 py-2 rounded shadow hover:scale-105 transition">
@@ -57,57 +43,42 @@ HEAD
       <button id="signInBtn" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
         🔐 Sign in with Google
       </button>
- upstream/main
     </div>
   </header>
 
-  <h1 class="text-4xl font-extrabold text-center mb-8 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-400">
+  <!-- 📚 Title -->
+  <h1 class="text-4xl font-extrabold text-center my-8 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-400">
     📚 MyNotes Library
   </h1>
 
-    <!-- Note Form -->
-    <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
-      <h2 class="text-2xl font-semibold mb-4">Add a New Note</h2>
-      <form id="noteForm" class="space-y-4">
-        <input type="text" id="title" placeholder="Note Title" required class="w-full p-3 border rounded-lg" />
-        <textarea id="description" placeholder="Description" required class="w-full p-3 border rounded-lg"></textarea>
-        <input type="url" id="link" placeholder="Paste File Link (Google Drive, Dropbox, etc)" required class="w-full p-3 border rounded-lg" />
-        <input type="text" id="tags" placeholder="Tags (comma separated)" class="w-full p-3 border rounded-lg" />
-        <button type="submit" class="bg-blue-500 text-white px-5 py-2 rounded-lg hover:bg-blue-600 transition">
-          💾 Save Note
-        </button>
-        <div id="progressBar" class="w-full bg-gray-300 h-3 rounded overflow-hidden mt-4 hidden">
-          <div id="progressFill" class="bg-blue-500 h-full w-0 transition-all duration-300 ease-linear"></div>
-        </div>
-      </form>
-    </div>
+  <main class="container mx-auto px-4 space-y-10">
 
+    <!-- 📝 Note Form -->
+    <section class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+      <h2 class="text-2xl font-semibold mb-4 text-gray-800 dark:text-white">Add a New Note</h2>
+      <form id="noteForm" class="space-y-4">
         <input type="text" id="title" placeholder="Note Title" required class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
         <textarea id="description" placeholder="Description" required class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white"></textarea>
         <input type="url" id="link" placeholder="Paste File Link (Google Drive, Dropbox, etc)" required class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+        <input type="text" id="tags" placeholder="Tags (comma separated)" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
         <button type="submit" class="bg-blue-600 text-white px-5 py-2 rounded-xl hover:bg-blue-700 transition">💾 Save Note</button>
         <div id="progressBar" class="w-full bg-gray-300 h-3 rounded overflow-hidden mt-3 hidden">
           <div id="progressFill" class="bg-blue-500 h-full w-0 transition-all duration-300 ease-linear"></div>
         </div>
       </form>
-    </div>
+    </section>
 
-    <!-- Search -->
-    <div class="mb-6">
-      <input type="text" id="searchInput" placeholder="🔍 Search notes..." class="w-full p-3 border rounded-lg" />
-    </div>
+    <!-- 🔍 Search -->
+    <section>
+      <input type="text" id="searchInput" placeholder="🔍 Search notes..." class="w-full p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+    </section>
 
-    <!-- Notes -->
-    <div>
-      <h2 class="text-2xl font-semibold mb-4">📄 Your Notes</h2>
-      <div id="notesContainer" class="space-y-4"></div>
-    </div>
-  </div>
-    <!-- 📄 Notes List -->
+    <!-- 📄 Notes Display -->
     <section>
       <h2 class="text-2xl font-semibold mb-4 text-blue-700 dark:text-blue-300">📄 Your Notes</h2>
       <div id="notesContainer" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
     </section>
+    
   </main>
 
   <!-- 🔥 Firebase Setup -->
@@ -115,7 +86,6 @@ HEAD
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-analytics.js";
     import {
-HEAD
       getFirestore, collection, addDoc, getDocs, setDoc,
       query, orderBy, doc, deleteDoc, where, updateDoc
     } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
@@ -157,8 +127,8 @@ HEAD
     window.signOut = signOut;
   </script>
 
+  <!-- 🌗 Dark Mode Script -->
   <script>
-    // Toggle dark mode
     const toggleBtn = document.getElementById("darkToggle");
     const body = document.getElementById("appBody");
     const htmlEl = document.documentElement;
