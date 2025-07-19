@@ -34,9 +34,7 @@ A minimalist and powerful web-based note-taking app with **Google Sign-In**, **r
 
 ---
 
-## 🚀 Getting Started
-
-### 🔧 Setup
+## 🔧 Setup
 
 1. Clone the repo:
    ```bash
