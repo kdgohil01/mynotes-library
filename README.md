@@ -45,6 +45,8 @@ A minimalist and powerful web-based note-taking app with **Google Sign-In**, **r
 
 3. Optional: Host via Firebase Hosting or Vercel.
 
+---
+
 ## 🧪 Future Enhancements
 
 - Tag-based filtering logic
@@ -56,6 +58,8 @@ A minimalist and powerful web-based note-taking app with **Google Sign-In**, **r
 - Dark mode toggle
 
 - Role-based access
+
+---
 
 ## 🧑‍💻 Author & Contributions
 
@@ -72,9 +76,13 @@ Contributions made:
 
 -Modern animations and transitions
 
+---
+
 ## 📄 License
 
 MIT License. Feel free to fork, clone, and contribute.
+
+---
 
 ## 🙌 Support
 
