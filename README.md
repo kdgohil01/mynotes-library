@@ -34,6 +34,37 @@ A minimalist and powerful web-based note-taking app with **Google Sign-In**, **r
 
 ---
 
+## 📁 Folder Structure
+
+```php
+mynotes-library/
+├── public/
+│   └── favicon.svg           # Optional: app icon or emojis
+│
+├── src/
+│   ├── auth/
+│   │   └── firebase.js       # Firebase config + auth/firestore setup
+│   │
+│   ├── components/
+│   │   ├── NoteForm.js       # JS handling note creation UI + logic
+│   │   ├── NoteCard.js       # JS to render each saved note
+│   │   └── ProgressBar.js    # UI and logic for progress indication
+│   │
+│   ├── styles/
+│   │   └── style.css         # Your Tailwind + custom CSS
+│   │
+│   ├── utils/
+│   │   └── helpers.js        # Any helper functions (e.g., tag parser, link preview)
+│   │
+│   └── main.js               # Entry point, listener bindings
+│
+├── index.html                # Main HTML (loads from src/)
+├── README.md
+├── .gitignore
+└── package.json              # If hosted or packaged with build tooling (optional)
+```
+
+---
 ## 🔧 Setup
 
 1. Clone the repo:
