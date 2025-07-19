@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MyNotes Library</title>
+  <title>📘 MyNotes Library</title>
   <meta name="theme-color" content="#3B82F6" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📘</text></svg>">
   <link rel="stylesheet" href="style.css" />
@@ -28,6 +28,19 @@
     }
   </style>
 </head>
+HEAD
+<body class="bg-gradient-to-br from-gray-100 to-gray-200 text-gray-900 min-h-screen font-sans">
+  <div class="container mx-auto px-4 py-8">
+    <!-- Auth Section -->
+    <div id="authSection" class="flex justify-between items-center mb-6">
+      <button id="signInBtn" class="bg-green-500 text-white px-4 py-2 rounded-lg shadow hover:bg-green-600 transition">
+        🔐 Sign in with Google
+      </button>
+      <div id="userInfo" class="hidden text-sm flex items-center gap-4">
+        <span id="userEmail" class="font-medium"></span>
+        <button id="logoutBtn" class="bg-red-500 text-white px-3 py-1 rounded-lg shadow hover:bg-red-600 transition">Logout</button>
+      </div>
+
 <body class="text-gray-900 min-h-screen transition-colors duration-500 bg-white dark:bg-gray-900" id="appBody">
 
   <!-- 🔝 Floating Header with Dark Mode Toggle beside Auth buttons -->
@@ -44,14 +57,31 @@
       <button id="signInBtn" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
         🔐 Sign in with Google
       </button>
+ upstream/main
     </div>
   </header>
 
-  <main class="container mx-auto px-4 py-6" id="mainApp">
-    <!-- 📝 Note Adding Form -->
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 mb-8">
-      <h2 class="text-2xl font-semibold mb-4 text-blue-700 dark:text-blue-300">➕ Add a New Note</h2>
+  <h1 class="text-4xl font-extrabold text-center mb-8 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-400">
+    📚 MyNotes Library
+  </h1>
+
+    <!-- Note Form -->
+    <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+      <h2 class="text-2xl font-semibold mb-4">Add a New Note</h2>
       <form id="noteForm" class="space-y-4">
+        <input type="text" id="title" placeholder="Note Title" required class="w-full p-3 border rounded-lg" />
+        <textarea id="description" placeholder="Description" required class="w-full p-3 border rounded-lg"></textarea>
+        <input type="url" id="link" placeholder="Paste File Link (Google Drive, Dropbox, etc)" required class="w-full p-3 border rounded-lg" />
+        <input type="text" id="tags" placeholder="Tags (comma separated)" class="w-full p-3 border rounded-lg" />
+        <button type="submit" class="bg-blue-500 text-white px-5 py-2 rounded-lg hover:bg-blue-600 transition">
+          💾 Save Note
+        </button>
+        <div id="progressBar" class="w-full bg-gray-300 h-3 rounded overflow-hidden mt-4 hidden">
+          <div id="progressFill" class="bg-blue-500 h-full w-0 transition-all duration-300 ease-linear"></div>
+        </div>
+      </form>
+    </div>
+
         <input type="text" id="title" placeholder="Note Title" required class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
         <textarea id="description" placeholder="Description" required class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white"></textarea>
         <input type="url" id="link" placeholder="Paste File Link (Google Drive, Dropbox, etc)" required class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
@@ -62,11 +92,17 @@
       </form>
     </div>
 
-    <!-- 🔎 Search bar -->
-    <div class="mb-8">
-      <input type="text" id="searchInput" placeholder="🔍 Search notes..." class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+    <!-- Search -->
+    <div class="mb-6">
+      <input type="text" id="searchInput" placeholder="🔍 Search notes..." class="w-full p-3 border rounded-lg" />
     </div>
 
+    <!-- Notes -->
+    <div>
+      <h2 class="text-2xl font-semibold mb-4">📄 Your Notes</h2>
+      <div id="notesContainer" class="space-y-4"></div>
+    </div>
+  </div>
     <!-- 📄 Notes List -->
     <section>
       <h2 class="text-2xl font-semibold mb-4 text-blue-700 dark:text-blue-300">📄 Your Notes</h2>
@@ -79,7 +115,9 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-analytics.js";
     import {
-      getFirestore, collection, addDoc, getDocs, query, orderBy, doc, deleteDoc, where
+HEAD
+      getFirestore, collection, addDoc, getDocs, setDoc,
+      query, orderBy, doc, deleteDoc, where, updateDoc
     } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
     import {
       getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut
@@ -104,6 +142,8 @@
     window.db = db;
     window.firestoreCollection = collection;
     window.firestoreAddDoc = addDoc;
+    window.firestoreSetDoc = setDoc;
+    window.firestoreUpdateDoc = updateDoc;
     window.firestoreGetDocs = getDocs;
     window.firestoreQuery = query;
     window.firestoreOrderBy = orderBy;
