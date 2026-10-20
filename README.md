@@ -95,7 +95,7 @@ mynotes-library/
 
 ## 🧑‍💻 Author & Contributions
 
-Built with ❤️ by Hem Ajit Patel
+Built with ❤️
 Contributions made:
 
 -Firebase Auth + Firestore integration
